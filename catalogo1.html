@@ -258,6 +258,7 @@
             const guide = book.guide;  // Se asume que guide es un array
             const keywords = book.keywords.join(', ');
             const completionStatus = book['completion status'];
+            const chapters = book['total_chapter'];
 
             const bookElement = document.createElement("div");
             bookElement.classList.add("book");
@@ -268,6 +269,10 @@
                 <div class="completion-status">
                     <h4>Estado:</h4>
                     <p>${completionStatus ? 'Completo' : 'En Emisión'}</p>
+                </div>
+                <div class="completion-status">
+                    <h4>Contenido:</h4>
+                    <p>${chapters}</p>
                 </div>
                 <div class="keywords">
                     <h3>Palabras Clave</h3>
