@@ -128,6 +128,60 @@
             background-color: #ccc;
             cursor: not-allowed;
         }
+
+        .pageNumberInput {
+            padding: 5px;
+            width: 50px;
+            font-size: 14px;
+            margin-left: 10px;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+        }
+
+        .pageNumbers {
+            margin-top: 10px;
+            text-align: center;
+        }
+
+        .pageNumbers button {
+            margin: 0 5px;
+            padding: 8px 12px;
+            border: none;
+            border-radius: 5px;
+            background-color: #f0f4f7;
+            cursor: pointer;
+        }
+
+        .pageNumbers button.active {
+            background-color: #5b9bd5;
+            color: white;
+        }
+
+        .pageNumbers button:hover {
+            background-color: #4a89c2;
+            color: white;
+        }
+
+        .pageNumbers button.disabled {
+            background-color: #ccc;
+            cursor: not-allowed;
+        }
+
+        .pageNumbers input {
+            padding: 5px;
+            width: 50px;
+            font-size: 14px;
+            margin-left: 10px;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+        }
+
+        /* Contador de resultados */
+        #resultCount {
+            margin-top: 10px;
+            font-size: 14px;
+            color: #333;
+        }
     </style>
 </head>
 <body>
@@ -136,6 +190,9 @@
     <!-- Buscador -->
     <input type="text" id="searchBox" placeholder="Buscar por título..." oninput="filterTable()">
     <button id="clearFilter" onclick="clearFilter()">Borrar Filtro</button>
+
+    <!-- Contador de resultados -->
+    <div id="resultCount"></div>
 
     <table id="booksTable">
         <thead>
@@ -154,7 +211,16 @@
     <!-- Paginación -->
     <div class="pagination">
         <button id="prevPage" onclick="changePage(-1)">Anterior</button>
+        <span id="pageNumberDisplay"></span>
         <button id="nextPage" onclick="changePage(1)">Siguiente</button>
+    </div>
+
+    <!-- Números de página dinámicos -->
+    <div class="pageNumbers" id="pageNumbers"></div>
+    
+    <!-- Buscador de página -->
+    <div>
+        <input type="number" id="pageInput" class="pageNumberInput" min="1" placeholder="Página" onchange="goToPage()">
     </div>
 
     <script>
@@ -212,9 +278,16 @@
                 tableBody.appendChild(row);
             });
 
+            // Actualizar la visualización de la página actual
+            document.getElementById('pageNumberDisplay').textContent = `Página ${currentPage}`;
+            updatePageNumbers();
+
             // Habilitar/deshabilitar botones de paginación
             document.getElementById('prevPage').disabled = currentPage === 1;
             document.getElementById('nextPage').disabled = currentPage * itemsPerPage >= data.length;
+
+            // Actualizar el contador de resultados
+            document.getElementById('resultCount').textContent = `Resultados encontrados: ${data.length}`;
         }
 
         // Función para cambiar la página
@@ -240,6 +313,61 @@
             filteredBooks = books; // Mostrar todos los libros
             currentPage = 1; // Volver a la primera página
             generateTable(filteredBooks, currentPage);
+        }
+
+        // Función para actualizar los números de página
+        function updatePageNumbers() {
+            const totalPages = Math.ceil(filteredBooks.length / itemsPerPage);
+            const startPage = Math.max(1, currentPage - 5);  // Muestra 5 páginas antes de la actual
+            const endPage = Math.min(totalPages, startPage + 9);  // Muestra hasta 10 páginas en total
+
+            const pageNumbersDiv = document.getElementById("pageNumbers");
+            pageNumbersDiv.innerHTML = '';
+
+            // Siempre mostrar la primera página y la última
+            const firstPageButton = document.createElement("button");
+            firstPageButton.textContent = "1";
+            firstPageButton.onclick = () => {
+                currentPage = 1;
+                generateTable(filteredBooks, currentPage);
+            };
+            pageNumbersDiv.appendChild(firstPageButton);
+
+            for (let i = startPage; i <= endPage; i++) {
+                const pageButton = document.createElement("button");
+                pageButton.textContent = i;
+                pageButton.onclick = () => {
+                    currentPage = i;
+                    generateTable(filteredBooks, currentPage);
+                };
+                if (i === currentPage) {
+                    pageButton.classList.add("active");
+                }
+                pageNumbersDiv.appendChild(pageButton);
+            }
+
+            // Siempre mostrar la última página
+            if (endPage < totalPages) {
+                const lastPageButton = document.createElement("button");
+                lastPageButton.textContent = totalPages;
+                lastPageButton.onclick = () => {
+                    currentPage = totalPages;
+                    generateTable(filteredBooks, currentPage);
+                };
+                pageNumbersDiv.appendChild(lastPageButton);
+            }
+        }
+
+        // Función para ir a la página especificada en el input
+        function goToPage() {
+            const pageInput = document.getElementById("pageInput");
+            const targetPage = parseInt(pageInput.value);
+            if (targetPage && targetPage > 0 && targetPage <= Math.ceil(filteredBooks.length / itemsPerPage)) {
+                currentPage = targetPage;
+                generateTable(filteredBooks, currentPage);
+            } else {
+                alert("Página no válida.");
+            }
         }
     </script>
 </body>
