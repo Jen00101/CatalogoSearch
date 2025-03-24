@@ -314,13 +314,11 @@
     }
 
     // Función para cambiar la página
-    function changePage(direction) {
-    if (direction === 'prev' && currentPage > 1) {
-            currentPage--;
-        } else if (direction === 'next' && currentPage < Math.ceil(filteredBooks.length / booksPerPage)) {
-            currentPage++;
+    function changePage(pageNumber) {
+        if (pageNumber > 0 && pageNumber <= Math.ceil(filteredBooks.length / booksPerPage)) {
+            currentPage = pageNumber;
+            renderBooks();
         }
-        renderBooks();
     }
 
     // Función para ir a una página específica
