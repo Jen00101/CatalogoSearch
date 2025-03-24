@@ -206,9 +206,9 @@
 
     <!-- Paginación arriba -->
     <div class="pagination">
-        <button id="prev-btn" onclick="changePage('prev')">Anterior</button>
+        <button id="prev-btn" onclick="changePageButtons('prev')">Anterior</button>
          <!-- Aquí van los números de página -->
-        <button id="next-btn" onclick="changePage('next')">Siguiente</button>
+        <button id="next-btn" onclick="changePageButtons('next')">Siguiente</button>
     </div>
     <div class="pagination" id="pagination"></div>
     
@@ -218,8 +218,8 @@
 
     <!-- Paginación abajo -->
     <div class="pagination">
-        <button id="prev-btn" onclick="changePage('prev')">Anterior</button>
-        <button id="next-btn" onclick="changePage('next')">Siguiente</button>
+        <button id="prev-btn" onclick="changePageButtons('prev')">Anterior</button>
+        <button id="next-btn" onclick="changePageButtons('next')">Siguiente</button>
         
     </div>
 
@@ -311,6 +311,15 @@
     function updateResultsCount() {
         const resultsCountElement = document.getElementById("results-count");
         resultsCountElement.textContent = `${filteredBooks.length} resultados encontrados`;
+    }
+
+    function changePageButtons(direction) {
+    if (direction === 'prev' && currentPage > 1) {
+            currentPage--;
+        } else if (direction === 'next' && currentPage < Math.ceil(filteredBooks.length / booksPerPage)) {
+            currentPage++;
+        }
+        renderBooks();
     }
 
     // Función para cambiar la página
