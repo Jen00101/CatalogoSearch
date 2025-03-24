@@ -207,17 +207,24 @@
     <!-- Paginación arriba -->
     <div class="pagination">
         <button id="prev-btn" onclick="changePage('prev')">Anterior</button>
+         <!-- Aquí van los números de página -->
         <button id="next-btn" onclick="changePage('next')">Siguiente</button>
     </div>
+    <div class="pagination" id="pagination"></div>
+    
     
     <!-- Lista de libros -->
     <div id="book-list"></div>
 
     <!-- Paginación abajo -->
     <div class="pagination">
-        <button id="prev-btn-bottom" onclick="changePage('prev')">Anterior</button>
-        <button id="next-btn-bottom" onclick="changePage('next')">Siguiente</button>
+        <button id="prev-btn" onclick="changePage('prev')">Anterior</button>
+        <button id="next-btn" onclick="changePage('next')">Siguiente</button>
+        
     </div>
+
+
+    <div class="pagination" id="pagination"></div>
 </div>
 
 <script>
@@ -297,6 +304,7 @@
         // Mostrar cuántos resultados se encontraron
         updateResultsCount();
         updatePagination();
+        updatePageNumbers();
     }
 
     // Función para actualizar la cantidad de resultados
@@ -307,7 +315,7 @@
 
     // Función para cambiar la página
     function changePage(direction) {
-        if (direction === 'prev' && currentPage > 1) {
+    if (direction === 'prev' && currentPage > 1) {
             currentPage--;
         } else if (direction === 'next' && currentPage < Math.ceil(filteredBooks.length / booksPerPage)) {
             currentPage++;
@@ -315,18 +323,63 @@
         renderBooks();
     }
 
+    // Función para ir a una página específica
+    function goToPage(pageNumber) {
+        currentPage = pageNumber;
+        renderBooks();
+    }
+
+
+
+
+
     // Función para actualizar los botones de paginación
     function updatePagination() {
-        const prevButton = document.getElementById("prev-btn");
-        const nextButton = document.getElementById("next-btn");
-        const prevButtonBottom = document.getElementById("prev-btn-bottom");
-        const nextButtonBottom = document.getElementById("next-btn-bottom");
+        const paginationElement = document.getElementById("pagination");
+        const totalPages = Math.ceil(filteredBooks.length / booksPerPage);
+        const maxButtons = 10;
+        const startPage = Math.max(1, currentPage - Math.floor(maxButtons / 2));
+        const endPage = Math.min(totalPages, startPage + maxButtons - 1);
 
-        prevButton.disabled = currentPage === 1;
-        nextButton.disabled = currentPage === Math.ceil(filteredBooks.length / booksPerPage);
-        prevButtonBottom.disabled = currentPage === 1;
-        nextButtonBottom.disabled = currentPage === Math.ceil(filteredBooks.length / booksPerPage);
+        let paginationHTML = `<button class="page-number" onclick="changePage(1)">1</button>`;
+
+        for (let i = startPage; i <= endPage; i++) {
+            paginationHTML += `<button class="page-number ${i === currentPage ? 'active' : ''}" onclick="changePage(${i})">${i}</button>`;
+        }
+
+        paginationHTML += `<button class="page-number" onclick="changePage(${totalPages})">${totalPages}</button>`;
+
+        paginationElement.innerHTML = paginationHTML;
     }
+
+    // Función para actualizar los números de la paginación
+    function updatePageNumbers() {
+        const paginationContainer = document.getElementById("pagination-numbers");
+        const totalPages = Math.ceil(filteredBooks.length / booksPerPage);
+        const pagesToShow = 10; // Mostrar hasta 10 números de página
+
+        let pageNumbersHTML = '';
+
+        // Determinar las páginas a mostrar
+        let startPage = Math.max(1, currentPage - Math.floor(pagesToShow / 2));
+        let endPage = Math.min(totalPages, startPage + pagesToShow - 1);
+
+        // Asegurarse de que siempre se muestren 10 números de página o menos si hay menos páginas
+        if (endPage - startPage < pagesToShow - 1) {
+            startPage = Math.max(1, endPage - pagesToShow + 1);
+        }
+
+        for (let i = startPage; i <= endPage; i++) {
+            pageNumbersHTML += `<button class="page-btn" onclick="goToPage(${i})">${i}</button>`;
+        }
+
+        paginationContainer.innerHTML = `
+            <button class="page-btn" onclick="goToPage(1)">1</button>
+            ${pageNumbersHTML}
+            <button class="page-btn" onclick="goToPage(${totalPages})">${totalPages}</button>
+        `;
+    }
+
 
     // Función para alternar la visibilidad de la descripción y la guía
     function toggleCollapse(button) {
