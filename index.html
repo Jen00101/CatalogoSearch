@@ -1,23 +1,62 @@
-
 <!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Botones de Redirección</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+        }
+        h1 {
+            color: #333;
+            font-size: 2rem;
+            margin-bottom: 30px;
+        }
+        button {
+            background-color: #007BFF; /* Azul */
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            font-size: 16px;
+            margin: 10px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        button:hover {
+            background-color: #0056b3; /* Azul más oscuro */
+            transform: translateY(-2px);
+            box-shadow: 0 8px 12px rgba(0, 0, 0, 0.2);
+        }
+        button:active {
+            background-color: #004085; /* Azul más oscuro cuando se hace clic */
+            transform: translateY(2px);
+            box-shadow: none;
+        }
+        button:focus {
+            outline: none;
+        }
+    </style>
 </head>
 <body>
     <h1>Selecciona una opción</h1>
 
     <!-- Botón 1 -->
-    <button onclick="window.location.href='catalogo2.html'">Ir a Xbanxia Catalogo 1</button>
+    <button onclick="window.location.href='catalogo2.html'">Ir a Tabla de Xbanxia</button>
     
     <!-- Botón 2 -->
-    <button onclick="window.location.href='catalogo1.html'">Ir a Ridi Catalogo</button>
+    <button onclick="window.location.href='catalogo1.html'">Ir a Catalogo de Ridi Web Novel</button>
 
-    <button onclick="window.location.href='catalogo3.html'">Ir a Ridi Ebooks Catalogo</button>
-
-    
+    <button onclick="window.location.href='catalogo3.html'">Ir a Catalogo de Ridi Ebooks</button>
 
 </body>
 </html>
