@@ -261,7 +261,7 @@
         // Limpiar la lista de libros
         bookListElement.innerHTML = "";
 
-        booksToRender.forEach(book => {
+        booksToRender.forEach((book, index) => {
             const title = book.title.join(', ');
             const coverImage = book.cover;
             //const description = book.description.join(' ');
