@@ -1,179 +1,176 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lista de Diccionarios</title>
-    <style>
-        /* ... tus estilos originales (sin cambios) ... */
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: #f7f7f7;
-        }
-        .container {
-            max-width: 800px;
-            margin: 20px auto;
-            padding: 20px;
-            background-color: #fff;
-            border-radius: 8px;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-        }
-        .book {
-            border: 1px solid #ddd;
-            margin-bottom: 20px;
-            padding: 15px;
-            border-radius: 8px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-            background-color: #f9f9f9;
-        }
-        .book h2 {
-            margin-top: 0;
-            text-align: center;
-        }
-        .keywords, .completion-status {
-            margin: 10px 0;
-            text-align: center;
-        }
-        .description, .guide {
-            margin: 10px 0;
-            text-align: justify;
-            display: none;
-        }
-        .cover {
-            width: 100%;
-            max-width: 300px;
-            display: block;
-            margin: 0 auto;
-            object-fit: contain;
-        }
-        .pagination {
-            text-align: center;
-            margin-top: 20px;
-        }
-        .pagination button {
-            padding: 8px 20px;
-            margin: 0 5px;
-            cursor: pointer;
-            background-color: #007BFF;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            font-size: 16px;
-        }
-        .pagination button:disabled {
-            background-color: #ccc;
-        }
-        .filter-container {
-            margin-bottom: 20px;
-            text-align: center;
-        }
-        .filter-container input, .filter-container select, .filter-container button {
-            padding: 10px;
-            margin: 5px;
-            font-size: 16px;
-            border-radius: 5px;
-            border: 1px solid #ccc;
-            background-color: #f9f9f9;
-        }
-        .filter-container button {
-            background-color: #28a745;
-            color: white;
-            cursor: pointer;
-        }
-        .filter-container .clear-button {
-            background-color: #dc3545;
-            color: white;
-        }
-        .filter-group {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 10px;
-            margin-bottom: 10px;
-        }
-        .collapse-button {
-            display: block;
-            margin: 10px auto;
-            padding: 8px 20px;
-            background-color: #007BFF;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            font-size: 16px;
-            cursor: pointer;
-        }
-        .search-container {
-            margin-bottom: 20px;
-            text-align: center;
-        }
-        .search-container input {
-            padding: 10px;
-            font-size: 16px;
-            width: 70%;
-            max-width: 300px;
-            border-radius: 5px;
-            border: 1px solid #ccc;
-            background-color: #f9f9f9;
-        }
-        .results-count {
-            font-size: 18px;
-            font-weight: bold;
-            text-align: center;
-            margin: 10px 0;
-        }
-        .no-bullets div {
-            margin-bottom: 17px;
-        }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Lista de Diccionarios</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #f7f7f7;
+    }
+    .container {
+      max-width: 800px;
+      margin: 20px auto;
+      padding: 20px;
+      background-color: #fff;
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    }
+    .book {
+      border: 1px solid #ddd;
+      margin-bottom: 20px;
+      padding: 15px;
+      border-radius: 8px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      background-color: #f9f9f9;
+    }
+    .book h2 {
+      margin-top: 0;
+      text-align: center;
+    }
+    .keywords, .completion-status {
+      margin: 10px 0;
+      text-align: center;
+    }
+    .description, .guide {
+      margin: 10px 0;
+      text-align: justify;
+      display: none;
+    }
+    .cover {
+      width: 100%;
+      max-width: 300px;
+      display: block;
+      margin: 0 auto;
+      object-fit: contain;
+    }
+    .pagination {
+      text-align: center;
+      margin-top: 20px;
+    }
+    .pagination button {
+      padding: 8px 20px;
+      margin: 0 5px;
+      cursor: pointer;
+      background-color: #007BFF;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      font-size: 16px;
+    }
+    .pagination button:disabled {
+      background-color: #ccc;
+    }
+    .filter-container {
+      margin-bottom: 20px;
+      text-align: center;
+    }
+    .filter-container input, .filter-container select, .filter-container button {
+      padding: 10px;
+      margin: 5px;
+      font-size: 16px;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+      background-color: #f9f9f9;
+    }
+    .filter-container button {
+      background-color: #28a745;
+      color: white;
+      cursor: pointer;
+    }
+    .filter-container .clear-button {
+      background-color: #dc3545;
+      color: white;
+    }
+    .filter-group {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 10px;
+    }
+    .collapse-button {
+      display: block;
+      margin: 10px auto;
+      padding: 8px 20px;
+      background-color: #007BFF;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+    .search-container {
+      margin-bottom: 20px;
+      text-align: center;
+    }
+    .search-container input {
+      padding: 10px;
+      font-size: 16px;
+      width: 70%;
+      max-width: 300px;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+      background-color: #f9f9f9;
+    }
+    .results-count {
+      font-size: 18px;
+      font-weight: bold;
+      text-align: center;
+      margin: 10px 0;
+    }
+    .no-bullets div {
+      margin-bottom: 17px;
+    }
+  </style>
 </head>
 <body>
 
 <div class="container">
-    <div class="search-container">
-        <button onclick="mostrarLista()">Ver Lista</button>
-        <button onclick="mostrarFavoritos()">Ver Favoritos</button>
-        <br><br>
-        <input type="text" id="search" placeholder="Buscar por título" onkeyup="searchBooks()">
-    </div>
+  <div class="search-container">
+    <button onclick="mostrarLista()">Ver Lista</button>
+    <button onclick="mostrarFavoritos()">Ver Favoritos</button>
+    <br><br>
+    <input type="text" id="search" placeholder="Buscar por título" onkeyup="searchBooks()">
+  </div>
 
-    <div class="filter-container">
-        <div id="filters"></div>
-        <div>
-            <label for="filter-logic">Lógica de filtro: </label>
-            <select id="filter-logic">
-                <option value="or">O (al menos uno)</option>
-                <option value="and">Y (todos)</option>
-            </select>
-        </div>
-        <button onclick="addFilter()">Agregar filtro</button>
-        <button onclick="applyFilters()">Filtrar</button>
-        <button class="clear-button" onclick="clearFilters()">Limpiar</button>
+  <div class="filter-container">
+    <div id="filters"></div>
+    <div>
+      <label for="filter-logic">Lógica de filtro: </label>
+      <select id="filter-logic">
+        <option value="or">O (al menos uno)</option>
+        <option value="and">Y (todos)</option>
+      </select>
     </div>
+    <button onclick="addFilter()">Agregar filtro</button>
+    <button onclick="applyFilters()">Filtrar</button>
+    <button class="clear-button" onclick="clearFilters()">Limpiar</button>
+  </div>
 
-    <div class="results-count" id="results-count">0 resultados encontrados</div>
+  <div class="results-count" id="results-count">0 resultados encontrados</div>
 
-    <div class="pagination">
-        <button onclick="changePageButtons('prev')">Anterior</button>
-        <button onclick="changePageButtons('next')">Siguiente</button>
-    </div>
+  <div class="pagination">
+    <button onclick="changePageButtons('prev')">Anterior</button>
+    <button onclick="changePageButtons('next')">Siguiente</button>
+  </div>
 
-    <!-- Lista de libros -->
-    <div id="book-list-container">
-        <div id="book-list"></div>
-    </div>
+  <div id="book-list-container">
+    <div id="book-list"></div>
+  </div>
 
-    <div class="pagination">
-        <button onclick="changePageButtons('prev')">Anterior</button>
-        <button onclick="changePageButtons('next')">Siguiente</button>
-    </div>
+  <div class="pagination">
+    <button onclick="changePageButtons('prev')">Anterior</button>
+    <button onclick="changePageButtons('next')">Siguiente</button>
+  </div>
 </div>
 
-<!-- Contenedor de Favoritos -->
 <div class="container" id="favoritos-list-container" style="display:none;">
-    <h2 style="text-align:center;">Lista de Favoritos</h2>
-    <div id="favoritos-list"></div>
+  <h2 style="text-align:center;">Lista de Favoritos</h2>
+  <div id="favoritos-list"></div>
 </div>
 
 <script>
@@ -183,158 +180,206 @@ let books = [];
 let filteredBooks = [];
 
 fetch('data_ebooks_vols2.json')
-    .then(response => response.json())
-    .then(data => {
-        books = Object.values(data[0]);
-        filteredBooks = books;
-        renderBooks();
-    });
+  .then(response => response.json())
+  .then(data => {
+    books = Object.values(data[0]);
+    filteredBooks = books;
+    renderBooks();
+  });
 
 function renderBooks() {
-    const bookListElement = document.getElementById("book-list");
-    const startIndex = (currentPage - 1) * booksPerPage;
-    const endIndex = startIndex + booksPerPage;
-    const booksToRender = filteredBooks.slice(startIndex, endIndex);
+  const bookListElement = document.getElementById("book-list");
+  const startIndex = (currentPage - 1) * booksPerPage;
+  const endIndex = startIndex + booksPerPage;
+  const booksToRender = filteredBooks.slice(startIndex, endIndex);
 
-    bookListElement.innerHTML = "";
+  bookListElement.innerHTML = "";
 
-    booksToRender.forEach(book => {
-        const title = book.title.join(', ');
-        const coverImage = book.cover;
-        const description = book.description;
-        const guide = book.guide;
-        const keywords = book.keywords.join(', ');
-        const completionStatus = book['completion status'];
-        const chapters = book['total_chapter'];
+  booksToRender.forEach(book => {
+    const title = book.title.join(', ');
+    const coverImage = book.cover;
+    const description = book.description;
+    const guide = book.guide;
+    const keywords = book.keywords.join(', ');
+    const completionStatus = book['completion status'];
+    const chapters = book['total_chapter'];
 
-        const bookElement = document.createElement("div");
-        bookElement.classList.add("book");
-        bookElement.innerHTML = `
-            <h2>${title}</h2>
-            <img src="${coverImage}" alt="Cover" class="cover">
-            <div class="completion-status">
-                <h4>Estado:</h4>
-                <p>${completionStatus ? 'Completo' : 'En Emisión'}</p>
-            </div>
-            <div class="completion-status">
-                <h4>Contenido:</h4>
-                <p>${chapters}</p>
-            </div>
-            <div class="keywords">
-                <h3>Palabras Clave</h3>
-                <p>${keywords}</p>
-            </div>
-            <div class="guide" style="display:none;">
-                <h3>Guía</h3>
-                <div class="no-bullets">${guide.map(item => `<div>${item}</div>`).join('')}</div>
-            </div>
-            <div class="description" style="display:none;">
-                <h3>Descripción</h3>
-                <div class="no-bullets">${description.map(item => `<div>${item}</div>`).join('')}</div>
-            </div>
-            <div class="collapse-button-container">
-                <button class="collapse-button" onclick="toggleCollapse(this)">Mostrar Descripción/Guía</button>
-            </div>
-            <div style="text-align:center; margin-top:10px;">
-                <button class="collapse-button" onclick='agregarAFavoritos(${JSON.stringify(book)})'>Agregar a Favoritos</button>
-            </div>
-        `;
-        bookListElement.appendChild(bookElement);
-    });
+    const bookElement = document.createElement("div");
+    bookElement.classList.add("book");
+    bookElement.innerHTML = `
+      <h2>${title}</h2>
+      <img src="${coverImage}" alt="Cover" class="cover">
+      <div class="completion-status">
+        <h4>Estado:</h4>
+        <p>${completionStatus ? 'Completo' : 'En Emisión'}</p>
+      </div>
+      <div class="completion-status">
+        <h4>Contenido:</h4>
+        <p>${chapters}</p>
+      </div>
+      <div class="keywords">
+        <h3>Palabras Clave</h3>
+        <p>${keywords}</p>
+      </div>
+      <div class="guide" style="display:none;">
+        <h3>Guía</h3>
+        <div class="no-bullets">${guide.map(item => `<div>${item}</div>`).join('')}</div>
+      </div>
+      <div class="description" style="display:none;">
+        <h3>Descripción</h3>
+        <div class="no-bullets">${description.map(item => `<div>${item}</div>`).join('')}</div>
+      </div>
+      <div class="collapse-button-container">
+        <button class="collapse-button" onclick="toggleCollapse(this)">Mostrar Descripción/Guía</button>
+      </div>
+      <div style="text-align:center; margin-top:10px;">
+        <button class="collapse-button" onclick='agregarAFavoritos(${JSON.stringify(book)})'>Agregar a Favoritos</button>
+      </div>
+    `;
+    bookListElement.appendChild(bookElement);
+  });
 
-    document.getElementById("results-count").textContent = `${filteredBooks.length} resultados encontrados`;
+  document.getElementById("results-count").textContent = `${filteredBooks.length} resultados encontrados`;
 }
 
 function toggleCollapse(button) {
-    const bookElement = button.closest(".book");
-    const description = bookElement.querySelector(".description");
-    const guide = bookElement.querySelector(".guide");
-
-    const isVisible = description.style.display === "block";
-    description.style.display = isVisible ? "none" : "block";
-    guide.style.display = isVisible ? "none" : "block";
-
-    button.textContent = isVisible ? "Mostrar Descripción/Guía" : "Ocultar Descripción/Guía";
+  const bookElement = button.closest(".book");
+  const description = bookElement.querySelector(".description");
+  const guide = bookElement.querySelector(".guide");
+  const isVisible = description.style.display === "block";
+  description.style.display = isVisible ? "none" : "block";
+  guide.style.display = isVisible ? "none" : "block";
+  button.textContent = isVisible ? "Mostrar Descripción/Guía" : "Ocultar Descripción/Guía";
 }
 
 function changePageButtons(direction) {
-    const totalPages = Math.ceil(filteredBooks.length / booksPerPage);
-    if (direction === 'prev' && currentPage > 1) currentPage--;
-    else if (direction === 'next' && currentPage < totalPages) currentPage++;
-    renderBooks();
+  const totalPages = Math.ceil(filteredBooks.length / booksPerPage);
+  if (direction === 'prev' && currentPage > 1) currentPage--;
+  else if (direction === 'next' && currentPage < totalPages) currentPage++;
+  renderBooks();
 }
 
 function searchBooks() {
-    const query = document.getElementById("search").value.toLowerCase();
-    filteredBooks = books.filter(book => book.title.join(' ').toLowerCase().includes(query));
-    currentPage = 1;
-    renderBooks();
+  const query = document.getElementById("search").value.toLowerCase();
+  filteredBooks = books.filter(book => book.title.join(' ').toLowerCase().includes(query));
+  currentPage = 1;
+  renderBooks();
 }
 
 function agregarAFavoritos(book) {
-    let favoritos = JSON.parse(localStorage.getItem("favoritos")) || [];
-    if (!favoritos.some(f => f.title[0] === book.title[0])) {
-        favoritos.push(book);
-        localStorage.setItem("favoritos", JSON.stringify(favoritos));
-    }
+  let favoritos = JSON.parse(localStorage.getItem("favoritos")) || [];
+  if (!favoritos.some(f => f.title[0] === book.title[0])) {
+    favoritos.push(book);
+    localStorage.setItem("favoritos", JSON.stringify(favoritos));
+  }
 }
 
 function renderFavoritos() {
-    const contenedor = document.getElementById("favoritos-list");
-    contenedor.innerHTML = "";
-    const favoritos = JSON.parse(localStorage.getItem("favoritos")) || [];
+  const contenedor = document.getElementById("favoritos-list");
+  contenedor.innerHTML = "";
+  const favoritos = JSON.parse(localStorage.getItem("favoritos")) || [];
 
-    favoritos.forEach(book => {
-        const title = book.title.join(', ');
-        const coverImage = book.cover;
-        const description = book.description;
-        const guide = book.guide;
-        const keywords = book.keywords.join(', ');
-        const completionStatus = book['completion status'];
-        const chapters = book['total_chapter'];
+  favoritos.forEach(book => {
+    const title = book.title.join(', ');
+    const coverImage = book.cover;
+    const description = book.description;
+    const guide = book.guide;
+    const keywords = book.keywords.join(', ');
+    const completionStatus = book['completion status'];
+    const chapters = book['total_chapter'];
 
-        const bookElement = document.createElement("div");
-        bookElement.classList.add("book");
-        bookElement.innerHTML = `
-            <h2>${title}</h2>
-            <img src="${coverImage}" alt="Cover" class="cover">
-            <div class="completion-status">
-                <h4>Estado:</h4>
-                <p>${completionStatus ? 'Completo' : 'En Emisión'}</p>
-            </div>
-            <div class="completion-status">
-                <h4>Contenido:</h4>
-                <p>${chapters}</p>
-            </div>
-            <div class="keywords">
-                <h3>Palabras Clave</h3>
-                <p>${keywords}</p>
-            </div>
-            <div class="guide" style="display:none;">
-                <h3>Guía</h3>
-                <div class="no-bullets">${guide.map(item => `<div>${item}</div>`).join('')}</div>
-            </div>
-            <div class="description" style="display:none;">
-                <h3>Descripción</h3>
-                <div class="no-bullets">${description.map(item => `<div>${item}</div>`).join('')}</div>
-            </div>
-            <div class="collapse-button-container">
-                <button class="collapse-button" onclick="toggleCollapse(this)">Mostrar Descripción/Guía</button>
-            </div>
-        `;
-        contenedor.appendChild(bookElement);
-    });
+    const bookElement = document.createElement("div");
+    bookElement.classList.add("book");
+    bookElement.innerHTML = `
+      <h2>${title}</h2>
+      <img src="${coverImage}" alt="Cover" class="cover">
+      <div class="completion-status">
+        <h4>Estado:</h4>
+        <p>${completionStatus ? 'Completo' : 'En Emisión'}</p>
+      </div>
+      <div class="completion-status">
+        <h4>Contenido:</h4>
+        <p>${chapters}</p>
+      </div>
+      <div class="keywords">
+        <h3>Palabras Clave</h3>
+        <p>${keywords}</p>
+      </div>
+      <div class="guide" style="display:none;">
+        <h3>Guía</h3>
+        <div class="no-bullets">${guide.map(item => `<div>${item}</div>`).join('')}</div>
+      </div>
+      <div class="description" style="display:none;">
+        <h3>Descripción</h3>
+        <div class="no-bullets">${description.map(item => `<div>${item}</div>`).join('')}</div>
+      </div>
+      <div class="collapse-button-container">
+        <button class="collapse-button" onclick="toggleCollapse(this)">Mostrar Descripción/Guía</button>
+      </div>
+    `;
+    contenedor.appendChild(bookElement);
+  });
 }
 
 function mostrarLista() {
-    document.getElementById("book-list-container").style.display = "block";
-    document.getElementById("favoritos-list-container").style.display = "none";
+  document.getElementById("book-list-container").style.display = "block";
+  document.getElementById("favoritos-list-container").style.display = "none";
 }
 
 function mostrarFavoritos() {
-    document.getElementById("book-list-container").style.display = "none";
-    document.getElementById("favoritos-list-container").style.display = "block";
-    renderFavoritos();
+  document.getElementById("book-list-container").style.display = "none";
+  document.getElementById("favoritos-list-container").style.display = "block";
+  renderFavoritos();
+}
+
+function addFilter() {
+  const filterContainer = document.getElementById('filters');
+  const filterDiv = document.createElement('div');
+  filterDiv.classList.add('filter-group');
+  filterDiv.innerHTML = `
+    <input type="text" placeholder="Palabra clave" class="filter-keyword">
+    <label><input type="checkbox" class="exclude-checkbox"> Excluir</label>
+    <button onclick="removeFilter(this)">Eliminar</button>
+  `;
+  filterContainer.appendChild(filterDiv);
+}
+
+function removeFilter(button) {
+  const filterDiv = button.closest('.filter-group');
+  filterDiv.remove();
+}
+
+function applyFilters() {
+  const logic = document.getElementById("filter-logic").value;
+  const filterKeywords = [];
+  const excludeKeywords = [];
+
+  document.querySelectorAll('.filter-group').forEach(group => {
+    const keyword = group.querySelector('.filter-keyword').value.toLowerCase();
+    const exclude = group.querySelector('.exclude-checkbox').checked;
+    if (keyword) {
+      if (exclude) excludeKeywords.push(keyword);
+      else filterKeywords.push(keyword);
+    }
+  });
+
+  filteredBooks = books.filter(book => {
+    const keywords = book.keywords.map(k => k.toLowerCase());
+    const includeMatch = logic === 'and'
+      ? filterKeywords.every(k => keywords.includes(k))
+      : filterKeywords.length === 0 || filterKeywords.some(k => keywords.includes(k));
+    const excludeMatch = excludeKeywords.some(k => keywords.includes(k));
+    return includeMatch && !excludeMatch;
+  });
+
+  currentPage = 1;
+  renderBooks();
+}
+
+function clearFilters() {
+  document.getElementById('filters').innerHTML = '';
+  filteredBooks = books;
+  renderBooks();
 }
 </script>
 
