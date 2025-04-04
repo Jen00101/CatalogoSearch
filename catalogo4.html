@@ -302,7 +302,7 @@
                     <button class="collapse-button" onclick="toggleCollapse(this)">Mostrar Descripción/Guía</button>
                 </div>
                 <div style="text-align:center; margin-top:10px;">
-                    <button class="collapse-button" onclick='agregarAFavoritos(${JSON.stringify(book)})'>Agregar a Favoritos</button>
+                    <button class="collapse-button" onclick="agregarAFavoritosPorIndice(${startIndex + index})">Agregar a Favoritos</button>
                 </div>
             `;
             bookListElement.appendChild(bookElement);
@@ -311,6 +311,16 @@
         updatePagination();
         updatePageNumbers();
     }
+
+    function agregarAFavoritosPorIndice(index) {
+        const book = filteredBooks[index];
+        let favoritos = JSON.parse(localStorage.getItem("favoritos")) || [];
+        if (!favoritos.some(f => f.title[0] === book.title[0])) {
+            favoritos.push(book);
+            localStorage.setItem("favoritos", JSON.stringify(favoritos));
+        }
+    }
+
 
     function agregarAFavoritos(book) {
         let favoritos = JSON.parse(localStorage.getItem("favoritos")) || [];
