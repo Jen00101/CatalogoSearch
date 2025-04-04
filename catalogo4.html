@@ -336,7 +336,7 @@
     contenedor.innerHTML = "";
     const favoritos = JSON.parse(localStorage.getItem("favoritos")) || [];
 
-    favoritos.forEach(book => {
+    favoritos.forEach((book, index) => {
         const title = book.title.join(', ');
         const coverImage = book.cover;
         const description = book.description;
@@ -348,35 +348,47 @@
         const bookElement = document.createElement("div");
         bookElement.classList.add("book");
         bookElement.innerHTML = `
-        <h2>${title}</h2>
-        <img src="${coverImage}" alt="Cover" class="cover">
-        <div class="completion-status">
-            <h4>Estado:</h4>
-            <p>${completionStatus ? 'Completo' : 'En Emisión'}</p>
-        </div>
-        <div class="completion-status">
-            <h4>Contenido:</h4>
-            <p>${chapters}</p>
-        </div>
-        <div class="keywords">
-            <h3>Palabras Clave</h3>
-            <p>${keywords}</p>
-        </div>
-        <div class="guide" style="display:none;">
-            <h3>Guía</h3>
-            <div class="no-bullets">${guide.map(item => `<div>${item}</div>`).join('')}</div>
-        </div>
-        <div class="description" style="display:none;">
-            <h3>Descripción</h3>
-            <div class="no-bullets">${description.map(item => `<div>${item}</div>`).join('')}</div>
-        </div>
-        <div class="collapse-button-container">
-            <button class="collapse-button" onclick="toggleCollapse(this)">Mostrar Descripción/Guía</button>
-        </div>
+            <h2>${title}</h2>
+            <img src="${coverImage}" alt="Cover" class="cover">
+            <div class="completion-status">
+                <h4>Estado:</h4>
+                <p>${completionStatus ? 'Completo' : 'En Emisión'}</p>
+            </div>
+            <div class="completion-status">
+                <h4>Contenido:</h4>
+                <p>${chapters}</p>
+            </div>
+            <div class="keywords">
+                <h3>Palabras Clave</h3>
+                <p>${keywords}</p>
+            </div>
+            <div class="guide" style="display:none;">
+                <h3>Guía</h3>
+                <div class="no-bullets">${guide.map(item => `<div>${item}</div>`).join('')}</div>
+            </div>
+            <div class="description" style="display:none;">
+                <h3>Descripción</h3>
+                <div class="no-bullets">${description.map(item => `<div>${item}</div>`).join('')}</div>
+            </div>
+            <div class="collapse-button-container">
+                <button class="collapse-button" onclick="toggleCollapse(this)">Mostrar Descripción/Guía</button>
+            </div>
+            <div style="text-align:center; margin-top:10px;">
+                <button class="collapse-button" style="background-color:#dc3545;" onclick="eliminarDeFavoritos(${index})">Eliminar de Favoritos</button>
+            </div>
         `;
         contenedor.appendChild(bookElement);
     });
-    }
+}
+    function eliminarDeFavoritos(index) {
+    let favoritos = JSON.parse(localStorage.getItem("favoritos")) || [];
+    favoritos.splice(index, 1);
+    localStorage.setItem("favoritos", JSON.stringify(favoritos));
+    renderFavoritos(); // vuelve a renderizar la lista actualizada
+}
+
+    
+
 
     function mostrarLista() {
     document.getElementById("book-list-container").style.display = "block";
