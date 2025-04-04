@@ -176,6 +176,27 @@
         .no-bullets div {
             margin-bottom: 17px; /* Añade un pequeño espacio entre los elementos */
         }
+
+        .page-number {
+            margin: 0 5px;
+            padding: 8px 12px;
+            border: none;
+            border-radius: 5px;
+            background-color: #f0f4f7;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        .page-number:hover {
+            background-color: #4a89c2;
+            color: white;
+        }
+
+        .page-number.active {
+            background-color: #5b9bd5;
+            color: white;
+        }
+
     </style>
 </head>
 <body>
@@ -447,7 +468,8 @@
             paginationHTML += `<button class="page-number ${i === currentPage ? 'active' : ''}" onclick="changePage(${i})">${i}</button>`;
         }
 
-        paginationHTML += `<button class="page-number" onclick="changePage(${totalPages})">${totalPages}</button>`;
+        paginationHTML += `<button class="page-number ${i === currentPage ? 'active' : ''}" onclick="changePage(${i})">${i}</button>`;
+
 
         paginationElement.innerHTML = paginationHTML;
     }
