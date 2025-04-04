@@ -454,38 +454,40 @@
 
 
     // Función para actualizar los botones de paginación
+
     function updatePagination() {
     const paginationElement = document.getElementById("pagination");
     const totalPages = Math.ceil(filteredBooks.length / booksPerPage);
-    const maxButtons = 12; // Máximo de botones visibles entre primera y última
+    const maxButtons = 10;
 
     let paginationHTML = '';
 
     // Siempre mostrar primera página
     paginationHTML += `<button class="page-number ${currentPage === 1 ? 'active' : ''}" onclick="changePage(1)">1</button>`;
 
-    let startPage = Math.max(2, currentPage - 2);
-    let endPage = Math.min(totalPages - 1, currentPage + 2);
+    // Calcular el rango de páginas intermedias
+    let startPage = Math.max(2, currentPage - Math.floor(maxButtons / 2));
+    let endPage = startPage + maxButtons - 1;
 
-    if (startPage > 2) {
-        paginationHTML += `<span style="margin: 0 5px;">...</span>`;
+    // Asegurarse de no exceder totalPages - 1
+    if (endPage >= totalPages) {
+        endPage = totalPages - 1;
+        startPage = Math.max(2, endPage - maxButtons + 1);
     }
 
+    // Añadir páginas intermedias
     for (let i = startPage; i <= endPage; i++) {
         paginationHTML += `<button class="page-number ${i === currentPage ? 'active' : ''}" onclick="changePage(${i})">${i}</button>`;
     }
 
-    if (endPage < totalPages - 1) {
-        paginationHTML += `<span style="margin: 0 5px;">...</span>`;
-    }
-
-    // Siempre mostrar última página si hay más de una
+    // Mostrar última página si hay más de 1 página
     if (totalPages > 1) {
         paginationHTML += `<button class="page-number ${currentPage === totalPages ? 'active' : ''}" onclick="changePage(${totalPages})">${totalPages}</button>`;
     }
 
     paginationElement.innerHTML = paginationHTML;
 }
+
 
 
 
