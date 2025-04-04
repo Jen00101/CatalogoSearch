@@ -7,6 +7,23 @@
     <title>Lista de Diccionarios</title>
     <style>
         /* Estilos generales */
+        .paginationNext {
+            text-align: center;
+            margin-top: 20px;
+        }
+        .paginationNext button {
+            padding: 8px 20px;
+            margin: 0 5px;
+            cursor: pointer;
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+        .paginationNext button:disabled {
+            background-color: #ccc;
+        }
         body {
             font-family: Arial, sans-serif;
             margin: 0;
@@ -227,7 +244,7 @@
     <div class="results-count" id="results-count">0 resultados encontrados</div>
 
     <!-- Paginación arriba -->
-    <div class="pagination">
+    <div class="paginationNext">
         <button id="prev-btn" onclick="changePageButtons('prev')">Anterior</button>
          <!-- Aquí van los números de página -->
         <button id="next-btn" onclick="changePageButtons('next')">Siguiente</button>
@@ -239,7 +256,7 @@
         <div id="book-list"></div>
     </div>
     
-    <div class="pagination">
+    <div class="paginationNext">
         <button id="prev-btn" onclick="changePageButtons('prev')">Anterior</button>
         <button id="next-btn" onclick="changePageButtons('next')">Siguiente</button>
     </div>
