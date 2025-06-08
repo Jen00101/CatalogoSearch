@@ -7,6 +7,52 @@
     <title>Lista de Diccionarios</title>
     <style>
         /* Estilos generales */
+
+        .search-container {
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        .button-group {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            margin-bottom: 15px;
+        }
+
+        .toggle-btn {
+            padding: 10px 20px;
+            font-size: 15px;
+            font-weight: 500;
+            border: none;
+            border-radius: 25px;
+            background-color: #6c63ff;
+            color: white;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.1s ease;
+        }
+
+        .toggle-btn:hover {
+            background-color: #5a54d6;
+            transform: scale(1.03);
+        }
+
+        .toggle-btn:active {
+            transform: scale(0.98);
+        }
+
+        .search-container input {
+            padding: 12px;
+            font-size: 16px;
+            width: 70%;
+            max-width: 320px;
+            border-radius: 25px;
+            border: 1px solid #ccc;
+            background-color: #fff;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+
         .paginationNext {
             text-align: center;
             margin-top: 20px;
@@ -220,11 +266,13 @@
 <div class="container">
     <!-- Contenedor de búsqueda -->
     <div class="search-container">
-        <button onclick="mostrarLista()">Ver Lista</button>
-        <button onclick="mostrarFavoritos()">Ver Favoritos</button>
-        <br><br>
-        <input type="text" id="search" placeholder="Buscar por título" onkeyup="searchBooks()">
+        <div class="button-group">
+            <button class="toggle-btn" onclick="mostrarLista()">📚 Ver Novelas</button>
+            <button class="toggle-btn" onclick="mostrarFavoritos()">⭐ Ver Favoritos</button>
+        </div>
+        <input type="text" id="search" placeholder="🔍 Buscar por título..." onkeyup="searchBooks()">
     </div>
+
 
     <!-- Botón para mostrar opciones rápidas de palabras clave -->
 
@@ -232,31 +280,18 @@
 
     <!-- Contenedor de filtros -->
     <div class="filter-container">
-        <!--<div id="filters"></div>
-        <div>
-            <label for="filter-logic">Lógica de filtro: </label>
-            <select id="filter-logic">
-                <option value="or">O (al menos uno)</option>
-                <option value="and">Y (todos)</option>
-            </select>
-        </div>-->
-        <!-- Selector visual de palabras clave -->
-<div style="text-align: center; margin-top: 10px;">
-    <button onclick="toggleKeywordSelector()" style="padding:10px 20px; border-radius: 8px; background-color: #007BFF; color: white; border: none; cursor: pointer;">
-        🎯 Filtros rápidos por palabra clave
-    </button>
-</div>
+        <div style="text-align: center; margin-top: 10px;">
+            <button onclick="toggleKeywordSelector()" style="padding:10px 20px; border-radius: 8px; background-color: #007BFF; color: white; border: none; cursor: pointer;">
+                🎯 Filtros rápidos por palabra clave
+            </button>
+        </div>
 
-<div id="keyword-selector" style="display: none; margin-top: 15px;">
-    <p style="text-align:center; font-size: 14px; color: #555;">
-        Clic para <span style="color:green;">incluir</span>, doble clic para <span style="color:red;">excluir</span>, clic nuevamente para desactivar
-    </p>
-    <div id="keyword-buttons" style="display:flex; flex-wrap:wrap; gap:8px; justify-content:center; margin-top:10px;"></div>
-</div>
-
-        <button onclick="addFilter()">Agregar filtro</button>
-        <button onclick="applyFilters()">Filtrar</button>
-        <button class="clear-button" onclick="clearFilters()">Limpiar</button>
+        <div id="keyword-selector" style="display: none; margin-top: 15px;">
+            <p style="text-align:center; font-size: 14px; color: #555;">
+                Clic para <span style="color:green;">incluir</span>, doble clic para <span style="color:red;">excluir</span>, clic nuevamente para desactivar
+            </p>
+            <div id="keyword-buttons" style="display:flex; flex-wrap:wrap; gap:8px; justify-content:center; margin-top:10px;"></div>
+        </div>
     </div>
 
     <div class="results-count" id="results-count">0 resultados encontrados</div>
@@ -298,7 +333,7 @@
     let keywordsEs = ['', 'estilo occidental', 'Omegaverso', 'orientalismo', 'Autobús OO', 'Pacífico', 'Gru', 'Cóctel', 'punto de vista en tercera persona', 'Fantasía', 'Misterio/Ocultismo', 'Bebéjim', 'Hogugong', 'MANZ&#39;', 'Número de tentación', 'Occidental', 'Novela del príncipe', 'Saihyun', 'Loronyuk', 'Déjalo', 'De múltiples fines', 'Rabiq', 'Tres patos', 'raza de perro grande', 'Relación prohibida', 'lápiz', 'Pájaro temprano', 'académico', 'Nocturno', 'Sayena', 'Biniri', 'Caliente', 'Sidra de cereza', 'Serse', 'Primavera primavera', 'Iamina', 'Hotel Florencia', 'Por poder', 'Próxima producción', 'Gong Do-hee', 'Dumplings de piña', 'Lee Soon-jung', 'MIKI IIDA', 'Siempre día de primavera', 'Agua sin gas', 'M Azul', 'Disponible', 'Señor Yan', 'Gaha Biel', 'Ágata azul', 'Óxido', 'Inversión', 'Samyuk', 'Dal Hye-na', 'Tsundere-soo', 'Elianyang', 'Upenbi', 'Bala', 'Incidente', 'Danhae (Danhae)', 'píldoras para dormir', 'Leejan', 'mundo', 'Peanunner', 'Que esto', 'Chico gruñón', 'Jangbanoo', 'Rosa azul', 'Cambio de temperatura', 'Señor Nota', 'Song Chae-ha', 'Marwan', 'Novela web BL', 'encarcelamiento', 'Sólo uno', 'Así es', 'Industria del entretenimiento', 'Harley King', 'Zhi Yan', 'Shindaum', 'Tripulación', 'Reconocimiento', 'Dilgry', 'Batallón en ascenso', 'Amor no correspondido', 'Kang Woo-rim', 'mediodía ahora', 'Nakre', 'Lapis', 'Proyección astral', 'Floración', 'Madrugada', 'Paz perezosa', 'Pingüino de cuadros vichy', 'Siete noches', 'MNEME', 'patrocinador', 'Vetiver', 'Sillotte', 'Patrón amarillo', 'Diot', 'Hyeon-na-ra', 'Ama de casa B', 'salvación', 'Personas físicamente aptas', 'Sin resonancia', 'Sin yo', 'Calipso', 'Autodefensa', 'La urraca de cara negra', 'Oso de luz de luna', 'Verano E', 'Gwanghamjji', 'Obispo Plus', 'Dulce', 'Bebé de carga', 'Soy Yu-ni', 'Gwendolyn', 'Ballena', 'Príncipe tsundere', 'Galletas de arroz glutinoso y nueces', 'Aoomi', 'Té verde con leche', 'Sophie', 'demandas', 'risu risu', 'Hyohae', 'Azúcar Chu', 'En cualquier momento', 'Bongbli', 'LÍNEA', 'Imta', 'PROBLEMA', 'Esta pared', 'Ven a la luna', 'Queso Chop Chop', 'Obsesión', 'Chica', 'Erupción', 'Activo', 'Calificación: 4 puntos o más', 'Presa Yeonhee', 'Cheongyeondeok', '5 volúmenes o más', 'Contrarrestar', 'Abrazo', 'J aislado', 'batería', 'Samil', 'pomelo amarillo', 'Luna A-il', 'Jaebin Ryu', 'Niña pequeña', 'Moon Garam (noche)', 'Un tonto', 'Phil el negro', 'Cha Ye-seo', 'ciervo', 'Acusado', 'Elusco', 'Belleza', 'Romance de oficina', 'Negro/Estrategia', 'Tatuajes', 'contrato', 'plátano maduro', 'Raíces', 'Realeza/Nobleza', 'amigo &gt; amante', 'Toonplus', 'COSMO', 'Restos de llaves', 'Pastillas de pomelo', 'DASKA', 'MIM', 'enlace', 'Pimienta espumosa', 'Kim Oh', 'Kim In-myeong', 'Serialización', 'zorro ártico', 'Ja-wol-yeong', 'Persona tímida', 'Noche', 'Caña de azúcar', 'Saborea Hong', 'Dentro y fuera', 'Roxas', 'presentimiento', 'instrumento musical', 'Anorisil', 'Nombre Jeong', 'Trabajador dedicado', 'Loa', 'Novela WET', 'Defensa', 'Amor celestial', 'Azul Naranja', 'Relación sacerdotal', 'Romance de batalla', 'BLYNUE BLYNUE', 'Rirensia', 'Ran Iju', 'Historia/Periodo', 'Kim Ninja', 'Espada', 'Yubia', 'Juego', 'Neptuno', 'Amonre', 'Xiaozuki', 'Jinram', 'Discurso respetuoso', 'De sangre fría', 'Ver vista', 'Más de 10.000 estrellas', 'Groenendael', 'Eclipse', 'Alga', 'Longda', 'Ari Tang', 'Presa Han Yu', 'Ringo', 'Camisón', 'pergamino', 'Jamik', 'Tierra de mandarinas', 'Epiro', 'Songbia', 'Luna B', 'finalizar la sesión', 'Fresco', 'Sabor a lima carbonatada', 'Jinsojeon', 'mediana edad', 'Hermano menor', 'Punto', 'Mizuhara', 'vagón de carga', 'Cursor', 'estudiante de escuela primaria', 'Bidodam', 'Anzu', 'Abismo', 'dañino', 'Harusari', 'Quizás', 'Tico', 'Danhoru', 'Cielo nocturno Jinnam', 'Lo he estado haciendo', 'Yomibooks', 'Kang Ri-jin', 'Gósol', 'crecer', 'JB', 'Miumiyu', 'Pase Geek', 'Fase', 'Laruche', 'tallos de maíz', 'Yubaba', 'Número de hogares', 'Ttaryarya', 'Fumador empedernido', 'Una sola sombra', 'Nani', 'Esconder', 'Dael', 'bismo', 'Jamón y patata', 'demora', 'Labien', 'Habin Yoo', 'Lluvia de flores', 'Nebulosa', 'Oso de calabaza', 'Kanashi C', 'Kong', 'RS Media', 'Bokchi alienígena', 'Kim Seoyoon', 'Luz', '2RE', 'Autobús guía', 'ABCDI', 'Jeong I-seol', 'azulciico', 'libro electrónico', 'Víspera de Todos los Santos', 'ASEAN', 'Precipitación', 'Rival/Inferioridad', 'Kimpa', 'Conejo dorado', 'Aviso público', 'Número de chaebol', 'Gato de asfalto', 'Rodang', 'Arrepentido', 'Hebok', 'Mundo Joeun', 'lvd', 'ojos cenicientos', 'Primer amor', 'De pieA', 'Heesarang', 'Chil-o-sam', 'Señor Kim Ru', 'Diferencia de estatus', 'Jardín secreto', 'Desaparecido', 'No es', 'Té de jengibre', 'Número alegre', 'Park Hyun-bae', 'Gaudium', 'Más de 1000 reseñas', 'reunión', 'Han So-moo', 'Mariposa rompecabezas', 'Mantequilla Angpang', 'Robo', 'Libro electrónico', 'Refresco de pomelo', 'Ji So Woon', 'Sorprendente', 'Trabajo genial', 'Jin Yang', 'Bala de oro', 'Yushiyan', 'Hania', 'Pradera de los ciervos', 'Kim Carrot', 'Frijol de jalea', 'Noche negra', 'Lee Soon-deok', 'Sub es posible', 'Seda blanca', 'Altplus', 'Monstera', 'Cariope', 'Ganggong', 'Idea', 'Wolffrigel', 'Vivace', 'Cebada dorada', 'Sé amable', 'Remordimientos', 'Regresión', 'Shinna Kwon', 'Serbarum', 'Hola, hola', 'Newcock', 'Eres un ladrón de arroz y dinero.', 'Hennessy', 'jardín de sal', 'Fantasma de la luz de la luna', 'Fugitivo', 'Songdotsae', 'Traficante de drogas', 'Gestión inevitable', 'Necio', 'pureza', 'Shigatsu', 'Brillante', 'Buñuelos de espárragos', 'Harnen', 'Iona', 'Global', 'Aterciopelado', 'Suave por fuera, fuerte por dentro', 'Kim Deok-jeong', 'Dasomhagi', 'SF/Futuro', 'Dos Narae', 'Ibec', 'Certificado', 'Familia', 'Alma dorada', 'obispo', 'Número de embarazo', 'SM', 'Libros diarios', 'Monto inicial', 'Violeta', 'Pan de queso fondant', 'Lunático', 'narlo', 'Silenciar', 'Existencia extraterrestre', 'Puccino', 'Reina A', 'Kata', 'vía Láctea', 'barrera', 'Penchil', 'Agua dulce', 'granja de pimientos', 'Naminé', 'Bebé', 'Nilo', 'yoyó', 'Le Kyo', 'Oveja de la nube', 'Dicha', 'Castañas de carbón', 'Cosas de la escuela/campus', 'Espacio entre las manos', 'Canción Ryeo-ah', 'Formulación', 'Luis Dal', 'Copos de nieve', 'Jooki', 'Activo', 'Sherose', 'De sangre fría', 'Kim Yong Wang', 'Resplandor', 'Momopia', 'prisma', 'Yun Song-blin', 'Jun', 'Menta', 'Apagado', 'barba de cebada', 'amigo de la infancia', 'cima', 'Duque del Emperador', 'Número de asociación', 'poco común', 'Irim', 'Turbulencia', 'Guseul Yoon', 'Haebyah', 'Rápidos rápidos', 'más de 500 estrellas', 'Cuenta', 'La Compañía del Libro Oscuro', 'Estética del amanecer', 'Número de heridas', '311', 'Pastel de arroz con sésamo negro', 'Larga historia', 'Lluvia Pesada', 'Ha Tae-jin', 'Larry Ann', 'Nadarama', 'Goody Studio Co., Ltd.', 'Oye, es un cuento de hadas.', 'pimienta morada', 'Hoya', 'Rosa mosqueta', 'Moderno', 'Señor Bamil', 'Ninananu', 'Compañía Editorial Cultural Haksan', 'Agden', 'Parapova', 'Número rodante', 'Peroche', 'Puente aéreo', 'tiempo empleado', 'Azul llama', 'Sotavento', 'Diferencia', 'Yanscon', 'Axila tropical', 'Cayendo en los libros', 'Solicitud de visa', 'Diferencia de edad', 'musgo del desierto', 'no81', 'Cereza B', 'Haetae', 'Aihene', 'Conejo dorado y otros 2', 'Bloy', 'Dalhadam', 'enbloquear', 'Sí', 'Procesamiento de alimentos para perros', 'más de 1000 estrellas', 'Campanillas de invierno', 'Hangah', 'Imbécil', 'Gimbeok', 'Familia', 'Parque Ik-geu', 'Apagón', 'Lee Joo Woong', 'Una noche', 'Kim Ppeum', 'Philwoo', 'celos', 'Bbaenggul', 'Amanecer del río Han', 'Welton', 'Compañía Osh', 'Tensiano', 'Nivel del mar', 'Vida marina', 'Número de amor no correspondido', 'Natty Call', 'Brujas Inc.', 'Cereza noble', 'Kangjang', 'Inanna', 'Sony', 'Truco de amor', 'polvo rosa', 'pistón', 'búsqueda', 'brotes de judías verdes', 'Epitio', 'En palabras', 'Vacío puro', 'El mejor', 'extranjero', 'Ian', 'Número de habilidad', 'Lee Seol-lin', 'Libros a la luz de la luna', 'Halley', 'Agua remanufacturada', 'Cebada', 'U-chae', 'Blanca', 'Cerene', 'Tierra de tinta', 'Café B', 'plural', 'Cosas curativas', 'Irelia', 'Medicina para los enfermos', 'Estrella del lobo', 'Mezcla profunda', 'Akusu', 'Noche de principios de verano', 'Orquídea de pared', 'Bambi', 'Miseria', 'Ji Seo-yoon', 'Ryuso', 'Guba', 'Mintran', 'Dinero para viajes', 'Mandarina plateada', 'Fiebre', 'Agua con pala', 'Psique', 'Número de dedicatoria', 'Flor de yuzu', 'Y comercial B', 'Moon Haeng-bin', 'Textiles profesionales', 'Claire', 'Aize', 'Nos vemos', 'Viñedo', 'Gente e historia', 'En clave', 'La otra vida', 'Pieza de luna del amanecer', 'Pescado crudo a la parrilla', 'Grave', 'Creyang', 'Público puro', 'Cosas de cazador', 'MintBL', 'Sereno', 'Puerta completa', 'Tilu', 'Meteorito', 'Propietario', 'Canto del cisne', 'pleno verano', 'Más allá de', 'Cocineros', 'Cismo', 'Moon Ha-won', 'Im Cheong-sun', 'Shin Naong', 'maizal', 'Afilado', 'Cachorro todoterreno', 'Identificación', 'Wang Hae-na', '249', 'NAPUL', 'Trible', 'TONO', 'Después de todo', 'No luminoso', 'Ute', 'Ragno', 'La violación del rey', 'Bielli', 'Araceae macho', 'Pastel de arroz', 'Por Vivi', 'Tianshan Hongyeop', 'Echa un vistazo', 'Pemo', 'El aburrimiento en la vida', 'Cosas de crecimiento', 'más de 100 estrellas', 'Porcentaje mínimo', 'Bruja Inc.', 'Oye, oye', 'pieza de época', 'MORY', 'Política/Sociedad/Chaebol', 'daldare', 'Feb', 'Un día después', 'Parque Si-ang', 'Gelatina de colágeno', 'lilly05', 'Murciélago de escarcha', 'Lunático', 'truco', 'Vida pasada/reencarnación', 'fruta', 'Rumel', 'Número ordinario', 'Melocotón rojo', 'Kaet', 'Fábrica de salsa de soja', 'meridiano', 'Jacinto (arroyo y río)', 'Misterio/Suspenso', 'Basura de clave inversa', 'Manjule', 'Cuerpo', 'La vida cotidiana', 'Shashashu', 'Feliz Ull', 'Renuncia', 'renunciar', 'Más de 100 reseñas', 'Canips', 'Rumbo', 'Kitsch', 'Celiacca', 'Librería Maru', 'Desperdiciar', 'Libro electrónico', 'Cumingk', 'Verano BL', 'Pianísimo', 'Fuerte', 'Señor Kim', 'Sunion', 'Medios de comunicación AA', 'Un Ji-ho', 'Láser', 'sojerry', 'Leeha', 'Imbécil', 'Poligamia', 'Bestia W', 'Maldita sea', 'Hanbi Dan', 'Ennard', 'Teoría de la correspondencia', 'Bbeom Bbeom Mucho', 'Embajador', 'Ballena Noble', 'B&amp;M', 'Luna azul', 'Kim Yeon-rae', 'Gratis si esperas', 'Luna azul', 'Yas', 'Punto de aviso público', 'Hong Ari', 'Gruñón', 'Kaba', 'Explosión', 'también', 'Lee Eun Rin', 'Único', 'Fruta natural', 'Magnon', 'Superpotencia', 'Seo Yul-un', 'U-ma', 'Noble elegante', 'Belcore', 'Fin del modo', 'Seo Hyo', 'Duro', 'deportes', 'ballena negra', 'Seram', 'CarpeXD', 'Tenin', 'Pisa', 'Mazorca de Rocheni', 'Chap Chap Chap', 'Gong del amante', 'Sopa Aesongi', 'Chaebol Gong', 'Cambio dimensional/intercambio de almas', 'Superioridad', 'Nevada', 'Lluvia azul', 'Torbellino', 'Linu', 'Jeong Iso', 'Alta sensibilidad', 'Día de los Inocentes', 'Código azul', 'Jinda Hong', 'Pablo', 'Coloquíntida', 'Oscuridad', 'Trabia', 'Lambov', 'Número puro', 'Elegante', 'Nombre de plata', 'Cohabitación/Cónyuge', 'Tú', 'Delos', 'Llorón', 'Malentendido/concepto erróneo', 'TP', 'Libro blanco', 'Ave de rapiña', 'Trébol', 'Serialización completada', 'HITAKI', 'Mente negra', 'Estratega', 'Fábrica de Golems', 'Amor y odio', 'MANZ&#39;', 'Baek Chun-hee', 'Chico guapo', 'Gracia en el bosque', 'Fermata', 'Estudio Azul Negro', 'Antes del amanecer', 'Punk ácido', 'cosas de palacio', 'PAB', 'hernia de disco', 'Recitar', 'número reinante', 'Jamak', 'Organización/submundo', 'Branio', 'Fusión', 'JaneM', 'Usar', 'Caer', 'Kimchi de cilantro', 'Envenenador', 'Aliento de oso', 'Pájaro de balada', 'ovejas eléctricas', 'Kim Dan-woo', 'Sí', 'Color del estado de ánimo amarillo claro', 'Kim Soo Hyun', 'Fiesta Z', 'Ena', 'Plaza Jun', 'Demi', 'Shaolín', 'Una mezcla', 'modo', 'Hermoso', 'Zorro', 'Spitang', 'Pino', 'Rundal', 'Belnoble', 'Charla cariñosa', 'Park Soon-deok', 'Suela de cúpula', 'Placer', 'Kim Yun-seul', 'Asentir', 'Reunión', 'Illio', 'Cuento de hadas del jacinto', 'El último que queda', 'Lee Hee-mi', 'Hangarin', 'Rocas K', 'Una historia triste', 'veneno de oro', 'Pino dorado junto al río', 'Parque Sol-nun', 'Saewookkang', 'Poligamia', 'Anillo de moneda', 'Presa de Yoon', 'Bambadam', 'Morgoth', 'Un solo entero', 'Belleza', 'Disco de algodón', 'En las estrellas', 'Herida', 'Esta tranquilo', 'Esto es todo', 'Caramelos de menta', 'Medios de comunicación humanos sabios', 'acetileno', 'Fábrica Golem Co., Ltd.', 'Agua pura', 'Fondeo de yates', 'amor caqui', 'Bosque de seda', 'Sía', 'Kang Yeo-ro', 'Vesícula biliar', 'Atributos del agua', 'Hay un subespacio', 'Jegal Deok-sun', 'Cómic/Gag', 'Samsami'];
     let searchQuery = '';
 
-    fetch('data_ebooks_vols2.json')
+    fetch('https://raw.githubusercontent.com/Jen00101/CatalogoSearch/refs/heads/main/data_ebooks_vols2.json')
         .then(response => response.json())
         .then(data => {
             books = Object.values(data[0]);
@@ -593,43 +628,29 @@
 
     // Función para aplicar los filtros
     function applyFilters() {
-    const filterLogic = document.getElementById('filter-logic').value;
+    const filterLogic = document.getElementById('filter-logic')?.value || 'or'; // fallback por si no existe
     const filterKeywords = [];
     const excludeKeywords = [];
 
-    // Agregar filtros visuales de los chips
+    // Usar filtros activos de los chips
     Object.entries(activeKeywordFilters).forEach(([kw, type]) => {
         if (type === "include") filterKeywords.push(kw);
         if (type === "exclude") excludeKeywords.push(kw);
-    });
-
-    // Agregar filtros manuales
-    const filterElements = document.querySelectorAll('.filter-group');
-    filterElements.forEach(filter => {
-        const keyword = filter.querySelector('.filter-keyword').value.trim();
-        const exclude = filter.querySelector('.exclude-checkbox').checked;
-
-        if (keyword) {
-            if (exclude) {
-                excludeKeywords.push(keyword);
-            } else {
-                filterKeywords.push(keyword);
-            }
-        }
     });
 
     // Filtrar los libros
     filteredBooks = books.filter(book => {
         const bookKeywords = book.keywords.join(' ').toLowerCase();
 
-        const includeMatch = filterKeywords.length === 0 || filterKeywords.some(keyword => bookKeywords.includes(keyword.toLowerCase()));
-        const excludeMatch = excludeKeywords.length === 0 || excludeKeywords.some(keyword => bookKeywords.includes(keyword.toLowerCase()));
+        const includeMatch = filterKeywords.length === 0 || (
+            filterLogic === 'or'
+                ? filterKeywords.some(keyword => bookKeywords.includes(keyword.toLowerCase()))
+                : filterKeywords.every(keyword => bookKeywords.includes(keyword.toLowerCase()))
+        );
 
-        if (filterLogic === 'or') {
-            return includeMatch && !excludeMatch;
-        } else if (filterLogic === 'and') {
-            return includeMatch && !excludeMatch;
-        }
+        const excludeMatch = excludeKeywords.some(keyword => bookKeywords.includes(keyword.toLowerCase()));
+
+        return includeMatch && !excludeMatch;
     });
 
     renderBooks();
