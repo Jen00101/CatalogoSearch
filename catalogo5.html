@@ -593,43 +593,48 @@
 
     // Función para aplicar los filtros
     function applyFilters() {
-        const filterLogic = document.getElementById('filter-logic').value;
-        const filterKeywords = [];
-        const excludeKeywords = [];
+    const filterLogic = document.getElementById('filter-logic').value;
+    const filterKeywords = [];
+    const excludeKeywords = [];
 
-        const filterElements = document.querySelectorAll('.filter-group');
-        filterElements.forEach(filter => {
-            const keyword = filter.querySelector('.filter-keyword').value.trim();
-            const exclude = filter.querySelector('.exclude-checkbox').checked;
+    // Agregar filtros visuales de los chips
+    Object.entries(activeKeywordFilters).forEach(([kw, type]) => {
+        if (type === "include") filterKeywords.push(kw);
+        if (type === "exclude") excludeKeywords.push(kw);
+    });
 
-            if (keyword) {
-                if (exclude) {
-                    excludeKeywords.push(keyword);
-                } else {
-                    filterKeywords.push(keyword);
-                }
+    // Agregar filtros manuales
+    const filterElements = document.querySelectorAll('.filter-group');
+    filterElements.forEach(filter => {
+        const keyword = filter.querySelector('.filter-keyword').value.trim();
+        const exclude = filter.querySelector('.exclude-checkbox').checked;
+
+        if (keyword) {
+            if (exclude) {
+                excludeKeywords.push(keyword);
+            } else {
+                filterKeywords.push(keyword);
             }
-        });
+        }
+    });
 
-        // Filtrar los libros
-        filteredBooks = books.filter(book => {
-            const bookKeywords = book.keywords.join(' ').toLowerCase();
+    // Filtrar los libros
+    filteredBooks = books.filter(book => {
+        const bookKeywords = book.keywords.join(' ').toLowerCase();
 
-            // Si hay filtros de inclusión
-            const includeMatch = filterKeywords.length === 0 || filterKeywords.some(keyword => bookKeywords.includes(keyword.toLowerCase()));
-            // Si hay filtros de exclusión
-            const excludeMatch = excludeKeywords.length === 0 || excludeKeywords.some(keyword => bookKeywords.includes(keyword.toLowerCase()));
+        const includeMatch = filterKeywords.length === 0 || filterKeywords.some(keyword => bookKeywords.includes(keyword.toLowerCase()));
+        const excludeMatch = excludeKeywords.length === 0 || excludeKeywords.some(keyword => bookKeywords.includes(keyword.toLowerCase()));
 
-            // Si se usa "OR" (lógica OR) o "AND" (lógica AND)
-            if (filterLogic === 'or') {
-                return includeMatch && !excludeMatch;
-            } else if (filterLogic === 'and') {
-                return includeMatch && !excludeMatch;
-            }
-        });
+        if (filterLogic === 'or') {
+            return includeMatch && !excludeMatch;
+        } else if (filterLogic === 'and') {
+            return includeMatch && !excludeMatch;
+        }
+    });
 
-        renderBooks();
-    }
+    renderBooks();
+}
+
 
     // Función para limpiar los filtros
     function clearFilters() {
