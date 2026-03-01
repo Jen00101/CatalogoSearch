@@ -435,7 +435,7 @@
 
         if (coverUrl) {
           const img = document.createElement("img");
-          img.src = coverUrl;
+          img.src = (book.cover && book.cover.trim()) ? book.cover : FALLBACK_COVER;
           img.alt = book.title ? `Portada: ${book.title}` : "Portada del libro";
           img.loading = "lazy";
           img.style.cursor = "pointer";
