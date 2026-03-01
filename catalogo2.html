@@ -1,374 +1,607 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tabla de Libros</title>
-    <style>
-        /* Estilos globales */
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f7fc;
-            margin: 0;
-            padding: 0;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            min-height: 100vh;
-        }
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Catálogo de Libros</title>
+  <style>
+    /* Estilos globales */
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f7fc;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      min-height: 100vh;
+    }
 
-        h2 {
-            color: #333;
-            margin-bottom: 20px;
-        }
+    h2 {
+      color: #333;
+      margin: 30px 0 15px;
+    }
 
-        /* Buscador */
-        #searchBox {
-            margin-bottom: 15px;
-            padding: 10px;
-            width: 100%;
-            max-width: 350px;
-            margin-left: auto;
-            margin-right: auto;
-            display: block;
-            border-radius: 5px;
-            border: 1px solid #ddd;
-            font-size: 14px;
-            transition: border-color 0.3s;
-        }
+    /* Buscador */
+    .toolbar {
+      width: 100%;
+      max-width: 1200px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      padding: 0 12px;
+      box-sizing: border-box;
+    }
 
-        #searchBox:focus {
-            border-color: #5b9bd5;
-            outline: none;
-        }
+    #searchBox {
+      padding: 10px;
+      width: 100%;
+      max-width: 350px;
+      border-radius: 5px;
+      border: 1px solid #ddd;
+      font-size: 14px;
+      transition: border-color 0.3s;
+    }
 
-        /* Botón de borrar filtro */
-        #clearFilter {
-            background-color: #ff5a5f;
-            border: none;
-            padding: 10px 15px;
-            color: white;
-            cursor: pointer;
-            border-radius: 5px;
-            font-size: 14px;
-            transition: background-color 0.3s;
-            margin-left: 10px;
-        }
+    #searchBox:focus {
+      border-color: #5b9bd5;
+      outline: none;
+    }
 
-        #clearFilter:hover {
-            background-color: #ff3b41;
-        }
+    /* Botón de borrar filtro */
+    #clearFilter {
+      background-color: #ff5a5f;
+      border: none;
+      padding: 10px 15px;
+      color: white;
+      cursor: pointer;
+      border-radius: 5px;
+      font-size: 14px;
+      transition: background-color 0.3s;
+      white-space: nowrap;
+    }
 
-        /* Tabla */
-        table {
-            width: 100%;
-            max-width: 1000px;
-            border-collapse: collapse;
-            margin-top: 20px;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-            background-color: white;
-            border-radius: 8px;
-            overflow: hidden;
-        }
+    #clearFilter:hover {
+      background-color: #ff3b41;
+    }
 
-        th, td {
-            padding: 12px;
-            text-align: left;
-            color: #555;
-        }
+    /* Contador de resultados */
+    #resultCount {
+      margin-top: 10px;
+      font-size: 14px;
+      color: #333;
+      width: 100%;
+      max-width: 1200px;
+      padding: 0 12px;
+      box-sizing: border-box;
+      text-align: left;
+    }
 
-        th {
-            background-color: #5b9bd5;
-            color: white;
-            font-weight: bold;
-        }
+    /* ✅ Catálogo (grid) */
+    .books-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+      gap: 20px;
+      max-width: 1200px;
+      width: 100%;
+      margin-top: 20px;
+      padding: 0 12px 20px;
+      box-sizing: border-box;
+    }
 
-        tr:nth-child(even) {
-            background-color: #f9f9f9;
-        }
+    .book-card {
+      background: white;
+      border-radius: 8px;
+      padding: 12px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+      text-align: center;
+      transition: transform 0.2s ease;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      overflow: hidden;
+    }
 
-        tr:hover {
-            background-color: #f1f1f1;
-        }
+    .book-card:hover {
+      transform: translateY(-5px);
+    }
 
-        a {
-            color: #5b9bd5;
-            text-decoration: none;
-            font-weight: bold;
-        }
+    .cover-wrap {
+      width: 130px;
+      height: 195px;
+      border-radius: 6px;
+      overflow: hidden;
+      border: 1px solid #e6e6e6;
+      background: #fafafa;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
 
-        a:hover {
-            text-decoration: underline;
-        }
+    .book-card img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
 
-        /* Paginación */
-        .pagination {
-            margin-top: 20px;
-            text-align: center;
-        }
+    .cover-placeholder {
+      font-size: 12px;
+      color: #999;
+      padding: 10px;
+      line-height: 1.2;
+    }
 
-        .pagination button {
-            padding: 10px 15px;
-            margin: 0 5px;
-            background-color: #55a4ee;
-            border: none;
-            color: white;
-            font-size: 14px;
-            cursor: pointer;
-            border-radius: 5px;
-            transition: background-color 0.3s;
-        }
+    .book-title {
+      font-size: 14px;
+      font-weight: bold;
+      color: #333;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+      min-height: 34px;
+    }
 
-        .pagination button:hover {
-            background-color: #4a89c2;
-        }
+    .book-title-es {
+      font-size: 12px;
+      color: #666;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+      min-height: 30px;
+    }
 
-        .pagination button:disabled {
-            background-color: #ccc;
-            cursor: not-allowed;
-        }
+    .book-meta {
+      font-size: 11px;
+      color: #888;
+    }
 
-        .pageNumberInput {
-            padding: 5px;
-            width: 50px;
-            font-size: 14px;
-            margin-left: 10px;
-            border-radius: 5px;
-            border: 1px solid #ddd;
-        }
+    .book-card a {
+      display: inline-block;
+      padding: 7px 10px;
+      background: #5b9bd5;
+      color: white;
+      border-radius: 4px;
+      font-size: 12px;
+      text-decoration: none;
+      font-weight: bold;
+      width: 100%;
+      box-sizing: border-box;
+    }
 
-        .pageNumbers {
-            margin-top: 10px;
-            text-align: center;
-        }
+    .book-card a:hover {
+      background: #4a89c2;
+    }
 
-        .pageNumbers button {
-            margin: 0 5px;
-            padding: 8px 12px;
-            border: none;
-            border-radius: 5px;
-            background-color: #f0f4f7;
-            cursor: pointer;
-        }
+    /* Paginación */
+    .pagination {
+      margin: 10px 0 10px;
+      text-align: center;
+      width: 100%;
+    }
 
-        .pageNumbers button.active {
-            background-color: #5b9bd5;
-            color: white;
-        }
+    .pagination button {
+      padding: 10px 15px;
+      margin: 0 5px;
+      background-color: #55a4ee;
+      border: none;
+      color: white;
+      font-size: 14px;
+      cursor: pointer;
+      border-radius: 5px;
+      transition: background-color 0.3s;
+    }
 
-        .pageNumbers button:hover {
-            background-color: #4a89c2;
-            color: white;
-        }
+    .pagination button:hover {
+      background-color: #4a89c2;
+    }
 
-        .pageNumbers button.disabled {
-            background-color: #ccc;
-            cursor: not-allowed;
-        }
+    .pagination button:disabled {
+      background-color: #ccc;
+      cursor: not-allowed;
+    }
 
-        .pageNumbers input {
-            padding: 5px;
-            width: 50px;
-            font-size: 14px;
-            margin-left: 10px;
-            border-radius: 5px;
-            border: 1px solid #ddd;
-        }
+    .pageNumberInput {
+      padding: 5px;
+      width: 70px;
+      font-size: 14px;
+      margin: 10px 0 30px;
+      border-radius: 5px;
+      border: 1px solid #ddd;
+      text-align: center;
+    }
 
-        /* Contador de resultados */
-        #resultCount {
-            margin-top: 10px;
-            font-size: 14px;
-            color: #333;
-        }
-    </style>
+    /* Números de página */
+    .pageNumbers {
+      margin-top: 10px;
+      text-align: center;
+      width: 100%;
+      padding: 0 12px;
+      box-sizing: border-box;
+    }
+
+    .pageNumbers button {
+      margin: 0 5px;
+      padding: 8px 12px;
+      border: none;
+      border-radius: 5px;
+      background-color: #f0f4f7;
+      cursor: pointer;
+    }
+
+    .pageNumbers button.active {
+      background-color: #5b9bd5;
+      color: white;
+    }
+
+    .pageNumbers button:hover {
+      background-color: #4a89c2;
+      color: white;
+    }
+
+    /* Modal (vista grande) */
+    .modal {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.6);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      box-sizing: border-box;
+      z-index: 999;
+    }
+
+    .modal.open {
+      display: flex;
+    }
+
+    .modal-content {
+      background: #fff;
+      border-radius: 10px;
+      max-width: 800px;
+      width: 100%;
+      overflow: hidden;
+      display: grid;
+      grid-template-columns: 260px 1fr;
+      gap: 0;
+    }
+
+    .modal-left {
+      background: #fafafa;
+      padding: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .modal-left img {
+      width: 100%;
+      height: auto;
+      border-radius: 8px;
+      border: 1px solid #eee;
+    }
+
+    .modal-right {
+      padding: 16px;
+    }
+
+    .modal-title {
+      font-size: 18px;
+      font-weight: bold;
+      margin: 0 0 8px;
+      color: #333;
+    }
+
+    .modal-subtitle {
+      font-size: 14px;
+      margin: 0 0 12px;
+      color: #666;
+    }
+
+    .modal-actions {
+      display: flex;
+      gap: 10px;
+      margin-top: 14px;
+      flex-wrap: wrap;
+    }
+
+    .modal-actions a {
+      background: #5b9bd5;
+      color: #fff;
+      padding: 10px 12px;
+      border-radius: 6px;
+      text-decoration: none;
+      font-weight: bold;
+      font-size: 14px;
+    }
+
+    .modal-actions a:hover {
+      background: #4a89c2;
+    }
+
+    .modal-close {
+      border: none;
+      background: #ff5a5f;
+      color: #fff;
+      padding: 10px 12px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: bold;
+      font-size: 14px;
+    }
+
+    .modal-close:hover {
+      background: #ff3b41;
+    }
+
+    @media (max-width: 700px) {
+      .modal-content {
+        grid-template-columns: 1fr;
+      }
+      .modal-left {
+        padding: 12px;
+      }
+    }
+  </style>
 </head>
 <body>
-    <h2>Lista de Libros</h2>
-    
-    <!-- Buscador -->
+  <h2>Lista de Libros</h2>
+
+  <div class="toolbar">
     <input type="text" id="searchBox" placeholder="Buscar por título..." oninput="filterTable()">
     <button id="clearFilter" onclick="clearFilter()">Borrar Filtro</button>
+  </div>
 
-    <!-- Contador de resultados -->
-    <div id="resultCount"></div>
+  <div id="resultCount"></div>
 
-    <table id="booksTable">
-        <thead>
-            <tr>
-                <th>ID</th>
-                <th>Título</th>
-                <th>Título en Español</th>
-                <th>Enlace</th>
-            </tr>
-        </thead>
-        <tbody>
-            <!-- Las filas se insertarán dinámicamente aquí -->
-        </tbody>
-    </table>
+  <!-- ✅ Contenedor del catálogo -->
+  <div id="booksContainer" class="books-grid"></div>
 
-    <!-- Paginación -->
-    <div class="pagination">
-        <button id="prevPage" onclick="changePage(-1)">Anterior</button>
-        <span id="pageNumberDisplay"></span>
-        <button id="nextPage" onclick="changePage(1)">Siguiente</button>
+  <!-- Paginación -->
+  <div class="pagination">
+    <button id="prevPage" onclick="changePage(-1)">Anterior</button>
+    <span id="pageNumberDisplay"></span>
+    <button id="nextPage" onclick="changePage(1)">Siguiente</button>
+  </div>
+
+  <!-- Números de página dinámicos -->
+  <div class="pageNumbers" id="pageNumbers"></div>
+
+  <!-- Buscador de página -->
+  <div>
+    <input type="number" id="pageInput" class="pageNumberInput" min="1" placeholder="Página" onchange="goToPage()">
+  </div>
+
+  <!-- ✅ Modal para ver cover grande -->
+  <div class="modal" id="coverModal" onclick="closeModal(event)">
+    <div class="modal-content" onclick="event.stopPropagation()">
+      <div class="modal-left">
+        <img id="modalImg" src="" alt="Portada">
+      </div>
+      <div class="modal-right">
+        <p class="modal-title" id="modalTitle"></p>
+        <p class="modal-subtitle" id="modalTitleEs"></p>
+        <p class="book-meta" id="modalId"></p>
+        <div class="modal-actions">
+          <a id="modalLink" href="#" target="_blank" rel="noopener noreferrer">Ver Libro</a>
+          <button class="modal-close" onclick="forceCloseModal()">Cerrar</button>
+        </div>
+      </div>
     </div>
+  </div>
 
-    <!-- Números de página dinámicos -->
-    <div class="pageNumbers" id="pageNumbers"></div>
-    
-    <!-- Buscador de página -->
-    <div>
-        <input type="number" id="pageInput" class="pageNumberInput" min="1" placeholder="Página" onchange="goToPage()">
-    </div>
+  <script>
+    let books = [];
+    let filteredBooks = [];
+    let currentPage = 1;
+    const itemsPerPage = 40;
 
-    <script>
-        let books = [];
-        let filteredBooks = []; // Para almacenar los libros filtrados
-        let currentPage = 1;
-        const itemsPerPage = 40; // Número de libros por página
+    // (Opcional) placeholder local en vez de URL externa:
+    const FALLBACK_COVER = "";
 
-        // Cargar datos desde el archivo JSON
-        fetch('data.json')
-            .then(response => response.json())
-            .then(data => {
-                books = data;
-                filteredBooks = books; // Inicialmente no hay filtro
-                generateTable(filteredBooks, currentPage);
-            })
-            .catch(error => {
-                console.error('Error al cargar el archivo JSON:', error);
-            });
+    fetch("data.json")
+      .then((response) => response.json())
+      .then((data) => {
+        books = Array.isArray(data) ? data : [];
+        filteredBooks = books;
+        generateGrid(filteredBooks, currentPage);
+      })
+      .catch((error) => {
+        console.error("Error al cargar el archivo JSON:", error);
+      });
 
-        // Función para crear las filas de la tabla
-        function generateTable(data, page) {
-            const tableBody = document.querySelector("#booksTable tbody");
-            const start = (page - 1) * itemsPerPage;
-            const end = page * itemsPerPage;
-            const pageData = data.slice(start, end);
-            
-            // Limpiar el contenido de la tabla (en caso de que se llame varias veces)
-            tableBody.innerHTML = '';
+    function generateGrid(data, page) {
+      const container = document.getElementById("booksContainer");
+      const start = (page - 1) * itemsPerPage;
+      const end = page * itemsPerPage;
+      const pageData = data.slice(start, end);
 
-            // Recorrer cada libro y agregar una fila
-            pageData.forEach(book => {
-                const row = document.createElement("tr");
+      container.innerHTML = "";
 
-                const idCell = document.createElement("td");
-                idCell.textContent = book.id;
-                row.appendChild(idCell);
+      pageData.forEach((book) => {
+        const card = document.createElement("div");
+        card.className = "book-card";
 
-                const titleCell = document.createElement("td");
-                titleCell.textContent = book.title;
-                row.appendChild(titleCell);
+        const coverWrap = document.createElement("div");
+        coverWrap.className = "cover-wrap";
 
-                const titleSpanishCell = document.createElement("td");
-                titleSpanishCell.textContent = book.title_spanish;
-                row.appendChild(titleSpanishCell);
+        const coverUrl = book.cover;
 
-                const linkCell = document.createElement("td");
-                const link = document.createElement("a");
-                link.href = book.href;
-                link.textContent = "Ver Libro";
-                link.target = "_blank";
-                linkCell.appendChild(link);
-                row.appendChild(linkCell);
-
-                tableBody.appendChild(row);
-            });
-
-            // Actualizar la visualización de la página actual
-            document.getElementById('pageNumberDisplay').textContent = `Página ${currentPage}`;
-            updatePageNumbers();
-
-            // Habilitar/deshabilitar botones de paginación
-            document.getElementById('prevPage').disabled = currentPage === 1;
-            document.getElementById('nextPage').disabled = currentPage * itemsPerPage >= data.length;
-
-            // Actualizar el contador de resultados
-            document.getElementById('resultCount').textContent = `Resultados encontrados: ${data.length}`;
+        if (coverUrl) {
+          const img = document.createElement("img");
+          img.src = coverUrl;
+          img.alt = book.title ? `Portada: ${book.title}` : "Portada del libro";
+          img.loading = "lazy";
+          img.style.cursor = "pointer";
+          img.onclick = () => openModal(book);
+          coverWrap.appendChild(img);
+        } else {
+          const placeholder = document.createElement("div");
+          placeholder.className = "cover-placeholder";
+          placeholder.textContent = "Sin cover";
+          coverWrap.appendChild(placeholder);
         }
 
-        // Función para cambiar la página
-        function changePage(direction) {
-            currentPage += direction;
-            generateTable(filteredBooks, currentPage);
-        }
+        const title = document.createElement("div");
+        title.className = "book-title";
+        title.textContent = book.title ?? "";
 
-        // Función para filtrar los resultados por título
-        function filterTable() {
-            const query = document.getElementById("searchBox").value.toLowerCase();
-            filteredBooks = books.filter(book => 
-                book.title.toLowerCase().includes(query) || 
-                book.title_spanish.toLowerCase().includes(query)
-            );
-            currentPage = 1; // Al aplicar un filtro, volvemos a la primera página
-            generateTable(filteredBooks, currentPage);
-        }
+        const titleEs = document.createElement("div");
+        titleEs.className = "book-title-es";
+        titleEs.textContent = book.title_spanish ?? "";
 
-        // Función para borrar el filtro y mostrar todos los libros
-        function clearFilter() {
-            document.getElementById("searchBox").value = ''; // Limpiar el input de búsqueda
-            filteredBooks = books; // Mostrar todos los libros
-            currentPage = 1; // Volver a la primera página
-            generateTable(filteredBooks, currentPage);
-        }
+        const meta = document.createElement("div");
+        meta.className = "book-meta";
+        meta.textContent = book.id ? `ID: ${book.id}` : "";
 
-        // Función para actualizar los números de página
-        function updatePageNumbers() {
-            const totalPages = Math.ceil(filteredBooks.length / itemsPerPage);
-            const startPage = Math.max(1, currentPage - 5);  // Muestra 5 páginas antes de la actual
-            const endPage = Math.min(totalPages, startPage + 9);  // Muestra hasta 10 páginas en total
+        const link = document.createElement("a");
+        link.href = book.href ?? "#";
+        link.textContent = "Ver Libro";
+        link.target = "_blank";
+        link.rel = "noopener noreferrer";
 
-            const pageNumbersDiv = document.getElementById("pageNumbers");
-            pageNumbersDiv.innerHTML = '';
+        card.appendChild(coverWrap);
+        card.appendChild(title);
+        card.appendChild(titleEs);
+        card.appendChild(meta);
+        card.appendChild(link);
 
-            // Siempre mostrar la primera página y la última
-            const firstPageButton = document.createElement("button");
-            firstPageButton.textContent = "1";
-            firstPageButton.onclick = () => {
-                currentPage = 1;
-                generateTable(filteredBooks, currentPage);
-            };
-            pageNumbersDiv.appendChild(firstPageButton);
+        container.appendChild(card);
+      });
 
-            for (let i = startPage; i <= endPage; i++) {
-                const pageButton = document.createElement("button");
-                pageButton.textContent = i;
-                pageButton.onclick = () => {
-                    currentPage = i;
-                    generateTable(filteredBooks, currentPage);
-                };
-                if (i === currentPage) {
-                    pageButton.classList.add("active");
-                }
-                pageNumbersDiv.appendChild(pageButton);
-            }
+      document.getElementById("pageNumberDisplay").textContent = `Página ${currentPage}`;
+      updatePageNumbers();
 
-            // Siempre mostrar la última página
-            if (endPage < totalPages) {
-                const lastPageButton = document.createElement("button");
-                lastPageButton.textContent = totalPages;
-                lastPageButton.onclick = () => {
-                    currentPage = totalPages;
-                    generateTable(filteredBooks, currentPage);
-                };
-                pageNumbersDiv.appendChild(lastPageButton);
-            }
-        }
+      document.getElementById("prevPage").disabled = currentPage === 1;
+      document.getElementById("nextPage").disabled = currentPage * itemsPerPage >= data.length;
 
-        // Función para ir a la página especificada en el input
-        function goToPage() {
-            const pageInput = document.getElementById("pageInput");
-            const targetPage = parseInt(pageInput.value);
-            if (targetPage && targetPage > 0 && targetPage <= Math.ceil(filteredBooks.length / itemsPerPage)) {
-                currentPage = targetPage;
-                generateTable(filteredBooks, currentPage);
-            } else {
-                alert("Página no válida.");
-            }
-        }
-    </script>
+      document.getElementById("resultCount").textContent = `Resultados encontrados: ${data.length}`;
+    }
+
+    function changePage(direction) {
+      currentPage += direction;
+      generateGrid(filteredBooks, currentPage);
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+
+    function filterTable() {
+      const query = document.getElementById("searchBox").value.toLowerCase();
+
+      filteredBooks = books.filter((book) => {
+        const t1 = (book.title ?? "").toLowerCase();
+        const t2 = (book.title_spanish ?? "").toLowerCase();
+        return t1.includes(query) || t2.includes(query);
+      });
+
+      currentPage = 1;
+      generateGrid(filteredBooks, currentPage);
+    }
+
+    function clearFilter() {
+      document.getElementById("searchBox").value = "";
+      filteredBooks = books;
+      currentPage = 1;
+      generateGrid(filteredBooks, currentPage);
+    }
+
+    function updatePageNumbers() {
+      const totalPages = Math.ceil(filteredBooks.length / itemsPerPage);
+      const startPage = Math.max(1, currentPage - 5);
+      const endPage = Math.min(totalPages, startPage + 9);
+
+      const pageNumbersDiv = document.getElementById("pageNumbers");
+      pageNumbersDiv.innerHTML = "";
+
+      const firstPageButton = document.createElement("button");
+      firstPageButton.textContent = "1";
+      firstPageButton.onclick = () => {
+        currentPage = 1;
+        generateGrid(filteredBooks, currentPage);
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      };
+      pageNumbersDiv.appendChild(firstPageButton);
+
+      for (let i = startPage; i <= endPage; i++) {
+        const pageButton = document.createElement("button");
+        pageButton.textContent = i;
+        pageButton.onclick = () => {
+          currentPage = i;
+          generateGrid(filteredBooks, currentPage);
+          window.scrollTo({ top: 0, behavior: "smooth" });
+        };
+        if (i === currentPage) pageButton.classList.add("active");
+        pageNumbersDiv.appendChild(pageButton);
+      }
+
+      if (endPage < totalPages) {
+        const lastPageButton = document.createElement("button");
+        lastPageButton.textContent = totalPages;
+        lastPageButton.onclick = () => {
+          currentPage = totalPages;
+          generateGrid(filteredBooks, currentPage);
+          window.scrollTo({ top: 0, behavior: "smooth" });
+        };
+        pageNumbersDiv.appendChild(lastPageButton);
+      }
+    }
+
+    function goToPage() {
+      const pageInput = document.getElementById("pageInput");
+      const targetPage = parseInt(pageInput.value);
+
+      const maxPage = Math.ceil(filteredBooks.length / itemsPerPage);
+      if (targetPage && targetPage > 0 && targetPage <= maxPage) {
+        currentPage = targetPage;
+        generateGrid(filteredBooks, currentPage);
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      } else {
+        alert("Página no válida.");
+      }
+    }
+
+    // ✅ Modal
+    function openModal(book) {
+      const modal = document.getElementById("coverModal");
+      const modalImg = document.getElementById("modalImg");
+      const modalTitle = document.getElementById("modalTitle");
+      const modalTitleEs = document.getElementById("modalTitleEs");
+      const modalId = document.getElementById("modalId");
+      const modalLink = document.getElementById("modalLink");
+
+      modalImg.src = book.cover || FALLBACK_COVER;
+      modalImg.alt = book.title ? `Portada: ${book.title}` : "Portada";
+      modalTitle.textContent = book.title ?? "";
+      modalTitleEs.textContent = book.title_spanish ?? "";
+      modalId.textContent = book.id ? `ID: ${book.id}` : "";
+      modalLink.href = book.href ?? "#";
+
+      modal.classList.add("open");
+    }
+
+    function closeModal(event) {
+      // Si se hace click fuera del contenido del modal, cerramos
+      const modal = document.getElementById("coverModal");
+      if (event.target === modal) {
+        modal.classList.remove("open");
+      }
+    }
+
+    function forceCloseModal() {
+      document.getElementById("coverModal").classList.remove("open");
+    }
+
+    // Cerrar modal con ESC
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Escape") {
+        forceCloseModal();
+      }
+    });
+  </script>
 </body>
 </html>
